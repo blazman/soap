@@ -1,6 +1,6 @@
 templates.questionsTemplate = function(data){
   var content = `
-      <progress max="`+questionsList.length+`" value="0"></progress><div id="questionContainer" class="">`;
+      <div class="qContainer contain"><progress max="`+questionsList.length+`" value="0"></progress>`;
 
 
   for(var i = 0; i < questionsList.length; i++) {
@@ -21,18 +21,17 @@ templates.questionsTemplate = function(data){
           panel += '<h3>Implementation</h3><p>' + question.tips[2].implementation + '</p>';
         }
         if (question.tips[3].more) {
-          panel += '<h3>Search terms</h3><p>| ';
+          panel += '<h3>Further research</h3><p>| ';
           for (var s = 0; s < question.tips[3].more.length; s++){
             more = encodeURIComponent(question.tips[3].more[s]);
             panel += '<a href="https://duckduckgo.com/?q='+more+'" target="_blank">'+question.tips[3].more[s]+'</a> | ';
           }
           panel += '</p>';
         }
-        var button = '<i id="info-trigger-'+question.id+'" class="fas fa-plus-circle"></i>';
         // add the question
-        content += '<div class="question-panel" onclick="toggleInfo(\''+question.id+'\')"><h2>' + question.q + '</h2>';
+        content += '<details class="question-panel pink-border-glow"><summary><h2>' + question.q + '</h2></summary>';
         // if the panel content exists add it
-        content += panel !== "" ? button+'<div class="info-display panel-'+question.id+' closed">'+panel+'</div></div>' : '<br />';
+        content += panel !== "" ? panel+'</details>' : '<br />';
 
         content += '<div class="answers-container">';
 
@@ -53,7 +52,7 @@ templates.questionsTemplate = function(data){
              thisLabel += question.answers[j].answerText+ '</label>';
            }
            // start the form
-           content += '<div class="form-el">';
+           content += '<div class="form-el type-'+question.answers[j].type+'">';
 
            // if there's a textarea
            if (question.answers[j].type === 'textarea') {
@@ -72,25 +71,21 @@ templates.questionsTemplate = function(data){
            // end the form
            content += '</div>';
          }
+      } else if (question.id === "q0") {
+        // if it's the first question, lay out the content a bit differently
+        for (var k = 0; k < question.contentArray.length; k++){
+          content += `<div class="window pink-border-glow"><h3>`+question.contentArray[k].title+`</h3><p>`+question.contentArray[k].text+`</p></div>`;
+        }
       } else {
         // add the title and paragraphs
         content += '<h1>' + question.title + '</h1>';
-        // if it's the first question, lay out the content a bit differently
-        if (question.id === "q0") {
-          content += `<h2>`+question.contentArray[0]+`</h2><div class="text-img-wrap">`;
-          for (var k = 1; k < question.contentArray.length; k++){
-            content += `<section><img src="assets/images/pic-q0-`+k+`.gif"><p>`+question.contentArray[k]+`</p></section>`;
-          }
-          content += `</div>`;
-        } else {
-          content = formatArray(question.contentArray, content);
-        }
+        content = formatArray(question.contentArray, content);
       }
       // if its the first question
       // no closing div, just closing form
       content += question.isQ ? '</div></form>' : '</form>';
   }
-  content += '<div class="q0-only"><h4>This is the beta version of SOAP</h4><p>New content and features coming March 2020</p></div><div class="btn-wrap wrap-r"><button disabled id="previewPolicy" class="previewButton btn btn-seco">Preview</button><span class="q0-only">Ready?</span><button id="submitAnswers" onclick="handleSubmit()" class="nextButton btn btn-prim">Let\'s go!</button></div>';
+  content += '<div class="btn-wrap wrap-r"><button disabled id="previewPolicy" class="previewButton btn btn-seco">Preview</button><button id="submitAnswers" onclick="handleSubmit()" class="nextButton btn btn-prim pink-border-glow">Got it!</button></div>';
   content += '<small><a href="mailto:feedback@usesoap.app?subject=Suggested%20change&amp;body=The%20problem%20with%20this%20page%20is%3A%0AThis%20is%20what%20I%20expected%3A%0AAny%20other%20info%3A%0A%0AI%20%5Bam%20%2F%20am%20not%5D%20ok%20with%20being%20contacted%20about%20this%20suggested%20change%20(delete%20as%20appropriate)">Suggest changes by email</a> or <a href="https://github.com/gembarrett/soap/issues">on GitHub</a></small></div>';
   return content;
 };

@@ -1,5 +1,4 @@
 document.querySelectorAll('[contenteditable=true]').forEach(function (el) {
-  console.log(el);
   el.addEventListener('keydown', function(event){
     if (event.keyCode === 8) {
       var node = event.srcElement || event.target;
@@ -39,140 +38,231 @@ function isInActiveContentEditable(node) {
     return false;
 }
 
-
-function getAnswers(el, qId, tempA, tempD) {
-  // search el for inputs or textboxes.
-  var inputs = el.getElementsByTagName('input');
-  var textareas = el.getElementsByTagName('textarea');
-
-  // TODO: fix this duplication
-  // if there's a textarea containing text
-  if ((textareas.length > 0) && (textareas[0].value.length > 0)) {
-    // split up the input's id to get the number
-    var answerID = textareas[0].id.split("-")[1];
-
-    // unsplit the question ID
-    var tempQId = 'q'+qId;
-    const result = currentState.sectionQ.find(question => question.id === tempQId);
-
-    // push the text value object to the answers
-    tempA.push({
-      s: currentState.sectionC,
-      q: qId,
-      a: answerID,
-      t: textareas[0].value,
-    });
-    // store the inputted value in the dictionary
-    // should this be addToDictionary?
-    tempD[result.answers[answerID].storeAs] = textareas[0].value;
-  }
-
-  // for every input in the form
-  for (var i = 0; i < inputs.length; i++) {
-    // split up the input's id to get the number
-    var answerID = inputs[i].id.split("-")[1];
-
-    // unsplit the question ID
-    var tempQId = 'q'+qId;
-    var result = currentState.sectionQ.find(question => question.id === tempQId);
-
-    // if the input is a textbox containing value
-    if (inputs[i].type === "text" && inputs[i].value !== "") {
-      // if there's a storeAs value
-      if (result.answers[answerID].storeAs !== "") {
-        pushToDict(result.answers[answerID].storeAs, inputs[i].value);
-      }
-
-      // push the text value object to the currentState
-      tempA.push({
-        s: currentState.sectionC,
-        q: qId,
-        a: answerID,
-        t: inputs[i].value, // is this necessary if storeAs is working?
-      });
-    }
-
-    // if the input is a checked checkbox or selected radio button
-    if (inputs[i].checked) {
-
-      // if this answer excludes another question, add to the list
-      if (result.answers[answerID].excludes.length > 0) {
-        currentState.exclusions = currentState.exclusions.concat(result.answers[answerID].excludes);
-      }
-
-      // if there's a storeAs value, store it
-      if (result.answers[answerID].storeAs !== "") {
-        storedText = inputs[i].nextSibling.contentEditable === "true" ? inputs[i].nextSibling.innerText : result.answers[answerID].answerText;
-        pushToDict(result.answers[answerID].storeAs, storedText);
-      }
-      // push the question and answer object to the currentState
-      tempA.push({
-        s: currentState.sectionC,
-        q: qId,
-        a: answerID,
-      });
-
-    }
-  }
-  return tempA;
+function editAnswers() {
+  toggleEditMode();
+  collectAnswers(true);
 }
 
-function pushToDict(storeAs, answerText) {
+// when clicked, go through array of questions marked as editable and add/remove showAllQs class
+// this should be used when compiling a policy or pressing Done to end an editing session
+function collectAnswers(isEdited){
+  var dic = {};
+  var exc = [];
+  var ans = [];
+
+  // get all the editable questions
+  var questions = [];
+  // are the edited questions visible?
+  questions = document.querySelectorAll(".showAllQs");
+
+  // if we're in edit mode but no previous questions are visible
+  if (isEdited && questions.length === 0){
+      // starting the edit session
+      // grab all the hidden editable questions
+      questions = document.querySelectorAll(".editable, .current");
+      // show each of the questions
+      for (var a = 0; a < questions.length; a++){
+        questions[a].classList.toggle("showAllQs");
+      }
+  } else if (isEdited && questions.length > 0) {
+    // closing the edit session so collect all the visible answers
+    // for each question
+    for (var b = 0; b < questions.length; b++){
+      // get the input fields
+      var inputFields = checkForInputs(questions[b]);
+      // if there are input fields
+      if (inputFields !== false){
+        // grab the question number and data
+        qData = getQData(inputFields[0]);
+        // for each of the input fields
+        for (var bb = 0; bb < inputFields.length; bb++){
+          // get the ID
+          aNum = inputFields[bb].id.split("-")[1];
+          // if the element is checked or is a type of text box
+          if (inputFields[bb].checked || (inputFields[bb].type.includes("text") && inputFields[bb].value !== "")) {
+            // grab any exclusions
+            exc = updateExc(qData.data.answers[aNum], exc);
+            // save the answer
+            dic = saveToDict(inputFields[bb], qData.data.answers[aNum], dic);
+            ans = storeThisA(ans, qData.ref, aNum);
+          } else {
+            console.log('Not a selection or text box');
+          }
+        }
+      } else {
+        console.log('No inputs');
+      }
+      // then hide the question
+      questions[b].classList.toggle("showAllQs");
+    }
+  } else {
+    // we're collecting for a policy so get all the answers available so far
+    questions = document.querySelectorAll(".editable, .current");
+    // for each question
+    for (var c = 0; c < questions.length; c++){
+      // get the input fields
+      var inputFields = checkForInputs(questions[c]);
+      // if there are input fields
+      if (inputFields !== false){
+        // get the question number and data
+        qData = getQData(inputFields[0]);
+        // for each of the input fields
+        for (var cc = 0; cc < inputFields.length; cc++){
+          // get the ID
+          aNum = inputFields[cc].id.split("-")[1];
+          // if the element is checked or is a type of not-empty text box
+          if (inputFields[cc].checked || (inputFields[cc].type.includes("text") && inputFields[cc].value !== "")) {
+            // grab any exclusions
+            exc = updateExc(qData.data.answers[aNum], exc);
+            // save the answer
+            dic = saveToDict(inputFields[cc], qData.data.answers[aNum], dic);
+            ans = storeThisA(ans, qData.ref, aNum);
+          } else {
+            console.log('Unchecked or empty');
+          }
+        }
+      } else {
+        console.log('No inputs');
+      }
+    }
+  }
+
+  dict = dic;
+  currentState.answers = ans;
+  // collect any excluded question numbers
+  if (exc.length > 0){
+    currentState.exclusions = exc;
+  }
+}
+
+
+function findContent(q){
+  switch (true) {
+    case q < 9:
+      q = 'q'+q;
+      return sections[0].find(question => question.id === q);
+      break;
+    case q < 14:
+      q = 'q'+q;
+      return sections[1].find(question => question.id === q);
+      break;
+    case q < 21:
+      q = 'q'+q;
+      return sections[2].find(question => question.id === q);
+      break;
+    case q < 28:
+      q = 'q'+q;
+      return sections[3].find(question => question.id === q);
+      break;
+    case q < 35:
+      q = 'q'+q;
+      return sections[4].find(question => question.id === q);
+      break;
+    case q < 43:
+      q = 'q'+q;
+      return sections[5].find(question => question.id === q);
+      break;
+    case q < 49:
+      q = 'q'+q;
+      return sections[6].find(question => question.id === q);
+      break;
+    default:
+      console.log('Question not found');
+      break;
+  }
+}
+
+function getQData(el){
+  var q = {};
+  //# get the question number
+  q.ref = el.id.split("-")[0];
+  //# get the question data
+  q.data = findContent(q.ref.split('q')[1]);
+  return q;
+}
+
+function saveToDict(el, a, storage){
+  // if this answer has a storeas value
+  if (a.storeAs !== ""){
+    // if it's a selected button
+    if (el.checked){
+      // get the edited or unedited text
+      storage = el.nextSibling.contentEditable === "true" ? storeThisPair(a.storeAs, storage, el.nextSibling.innerText) : storeThisPair(a.storeAs, storage, a.answerText);
+    } else if (el.type.includes('text') && el.value !== "") {
+      // or store the contents of the text field
+      storage = storeThisPair(a.storeAs, storage, el.value);
+    }
+  } else {
+    console.log('No dictionary key found.');
+  }
+  return storage;
+}
+
+
+function storeThisA(storage, q, a){
+  q = q.split('q')[1];
+  storage.push({
+    q: q,
+    a: a
+  });
+  return storage;
+};
+
+function storeThisPair(el, storage, text) {
+  text = stripCode(text);
   // if the storeAs key already exists in the dictionary because it's a continuation of a list
-  if (storeAs in dict) {
+  if (el in storage) {
     // copy its current value into a temp array with the new value
     // if it's already an array, just push
-    if (Array.isArray(dict[storeAs])){ // checks if array - broken?
-      dict[storeAs].push(answerText);
+    if (Array.isArray(storage[el])){ // checks if array - broken?
+      storage[el].push(text);
     } else {
       // if not then add values to create an array
-      temp = [dict[storeAs], answerText];
+      temp = [storage[el], text];
       // then assign this temp array back to the key, overwriting the old value
-      dict[storeAs] = temp;
+      storage[el] = temp;
     }
   } else {
     // add the new key and value
-    dict[storeAs] = answerText;
+    storage[el] = text;
   }
+  return storage;
+}
+
+function toggleEditMode(){
+  // get the edit button
+  var editBtn = document.getElementById("editBtn");
+  // toggle the editing class on button and page
+  editBtn.classList.toggle('editMode');
+  page.classList.toggle('editMode');
+  // toggle edit button inner text
+  editBtn.innerText = editBtn.innerText == "EDIT" ? "DONE" : "EDIT";
+
+  // if the buttons are disabled, enable them, otherwise disable them
+  document.getElementById('previewPolicy').disabled === true ? document.getElementById('previewPolicy').disabled = false : document.getElementById('previewPolicy').disabled = true;
+  document.getElementById('submitAnswers').disabled === true ? document.getElementById('submitAnswers').disabled = false : document.getElementById('submitAnswers').disabled = true;
 }
 
 
-// when clicked, go through array of questions marked as editable and add/remove showAllQs class
-var editAnswers = function(){
-  var tempAnswers = [];
-  var tempDict = {};
-  // get the edit button
-  var editBtn = document.getElementById("editBtn");
-  // get all the editable questions
-  var questions = document.querySelectorAll(".editable");
-  // for each of the editable questions
-  for (var i=0; i<questions.length; i++){
-    // if the question has the visible class
-    if(questions[i].classList.contains("showAllQs")){
-      // remove it
-      questions[i].classList.remove("showAllQs");
-      // change the button text back to default
-      editBtn.innerText = 'EDIT';
-      // remove the active class from button
-      editBtn.classList.remove('editMode');
-      // enable the next and preview buttons
-      document.getElementById('previewPolicy').disabled = false;
-      document.getElementById('submitAnswers').disabled = false;
-      // now editing is done, it's time to grab all the answers in case they were updated
-      // using questions[i]
-      // var updatedAnswers = getAnswers(questions[i], questions[i].id, tempAnswers, tempDict);
-      // console.log(updatedAnswers);
-      // console.log(currentState.answers);
-      // getInput takes the question element, gets the inputs
-      // pass each element to getInput along with a temp answers array
-      // then replace the regular answers array with the temp one
-    } else {
-      questions[i].classList.add("showAllQs");
-      editBtn.innerText = 'DONE';
-      editBtn.classList.add('editMode');
-      // while editing, disable the next and preview buttons
-      document.getElementById('previewPolicy').disabled = true;
-      document.getElementById('submitAnswers').disabled = true;
-    }
+function checkForInputs(q){
+  els = q.querySelectorAll('input, textarea');
+  // if this question has answers
+  if (els.length > 0){
+    // return the elements
+    return els;
+  } else {
+    return false;
   }
+}
+
+function updateExc(a, e){
+  // check for exclusions
+  if (a.excludes.length > 0){
+    // add them to the list of excluded questions
+    e = e.concat(a.excludes);
+    return e;
+  } else {
+    return e;
+  }
+
 }

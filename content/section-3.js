@@ -10,8 +10,9 @@ var section3 = [
     "id":"q22",
     "q":"Can staff use biometric authentication to restrict device access?",
     "required":true,
-    "policyContent":"In order to protect devices from unauthorised physical infiltration, all devices which are used for [orgName] purposes should have an automatic screen lock enabled and may be configured to use [deviceAuth].",
+    "policyContent":"To protect devices from unauthorised physical infiltration, all devices which are used for [orgName] purposes should have an automatic screen lock enabled and may be configured to use [deviceAuth].",
     "appendixContent":"Be aware that touchscreen devices are susceptible to holding fingerprint marks which can be used to guess recently-used key sequences.",
+    "routineEntry":"",
     "answers":[
       {
         "type":"checkbox",
@@ -19,10 +20,12 @@ var section3 = [
         "storeAs":"[deviceAuth]",
         "excludes":[],
         "policyEntry":"",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"",
-            "tipList": ""
+            "tipList": "",
+            "linksList": ""
           }
         ]
       },
@@ -32,16 +35,18 @@ var section3 = [
         "storeAs":"[deviceAuth]",
         "excludes":[],
         "policyEntry":"",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"",
-            "tipList": "Be aware that facial recognition authentication is vulnerable to unauthorised access as most systems won't flag a sleeping face, an unwilling face, or a twin."
+            "tipList": "Be aware that facial recognition authentication is vulnerable to unauthorised access as most systems won't flag a sleeping face, an unwilling face, or a twin.",
+            "linksList": ""
           }
         ]
       }
     ],
     "tips":[
-      {"relevance":"If your organisation provides devices to staff or installs work profiles on their personal devices"},
+      {"relevance":"If your organization provides devices to staff or installs work profiles on their personal devices"},
       {"meaning":"Recent developments in facial and fingerprint recognition have led to biometric authentication becoming a convenient alternative to passwords, although there are security flaws which should be considered. It's important to also set up a password, code or phrase as an extra barrier that can't be as easily circumvented."},
       {"implementation":"The unlock method is irrelevant if devices are almost never locked; enabling the automatic screen lock helps to ensure that others can’t walk right through the open doors of an unlocked device."},
       {"more": ["security of face unlock id", "creating strong passwords", "security of biometric authentication"]}
@@ -50,10 +55,11 @@ var section3 = [
   {
     "isQuestion": true,
     "id":"q23",
-    "q":"Does your organisation use any tools for device security management?",
+    "q":"Does your organization use any tools for device security management?",
     "required":false,
-    "policyContent":"In order to support device security across the organisation, we use the following tools: [devSecTools]",
+    "policyContent":"To support device security across the organization, we use the following tools: [devSecTools]",
     "appendixContent":"",
+    "routineEntry":"",
     "answers":[
       {
         "type":"checkbox",
@@ -61,10 +67,12 @@ var section3 = [
         "storeAs":"[devSecTools]",
         "excludes":[],
         "policyEntry":"",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"",
-            "tipList": "Flock Agent for macOS & Linux system 'health checks': https://github.com/firstlookmedia/flock-agent"
+            "tipList": "",
+            "linksList": "Flock Agent for macOS & Linux system 'health checks': https://github.com/firstlookmedia/flock-agent"
           }
         ]
       },
@@ -74,10 +82,12 @@ var section3 = [
         "storeAs":"[devSecTools]",
         "excludes":[],
         "policyEntry":"",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"",
-            "tipList": "Stethoscope for Windows & macOS systems: https://ragtag.org/stethoscope"
+            "tipList": "",
+            "linksList": "Stethoscope for Windows & macOS systems: https://ragtag.org/stethoscope"
           }
         ]
       },
@@ -87,10 +97,12 @@ var section3 = [
         "storeAs":"[devSecTools]",
         "excludes":[],
         "policyEntry":"",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"",
-            "tipList": "Apple MDM documentation: https://developer.apple.com/documentation/devicemanagement"
+            "tipList": "",
+            "linksList": "Apple MDM documentation: https://developer.apple.com/documentation/devicemanagement"
           }
         ]
       },
@@ -100,10 +112,12 @@ var section3 = [
         "storeAs":"[devSecTools]",
         "excludes":[],
         "policyEntry":"",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"",
-            "tipList": "Google Endpoint Management: https://gsuite.google.com/products/admin/endpoint"
+            "tipList": "",
+            "linksList": "Google Endpoint Management: https://gsuite.google.com/products/admin/endpoint"
           }
         ]
       },
@@ -114,17 +128,19 @@ var section3 = [
         "storeAs":"[devSecTools]",
         "excludes":[],
         "policyEntry":"",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"",
-            "tipList": ""
+            "tipList": "",
+            "linksList": ""
           }
         ]
       }
     ],
     "tips":[
-      {"relevance":"For organisations where there are more than a handful of devices in use."},
-      {"meaning":"A security policy is of little use unless everyone it applies to is adhering to the rules it lays out, but it’s time-consuming to dig into the settings of every device in your organisation. Tools like Flock and Stethoscope can help with this; enabling you to perform a security “health check” on devices. Managing the security of multiple devices can also be made easier with Mobile Device Management (MDM) services, as it can enable the remote install of VPNs and other security apps, as well as remote wipe in the case of device confiscation."},
+      {"relevance":"For organizations where there are more than a handful of devices in use."},
+      {"meaning":"A security policy is of little use unless everyone it applies to is adhering to the rules it lays out, but it’s time-consuming to dig into the settings of every device in your organization. Tools like Flock and Stethoscope can help with this; enabling you to perform a security “health check” on devices. Managing the security of multiple devices can also be made easier with Mobile Device Management (MDM) services, as it can enable the remote install of VPNs and other security apps, as well as remote wipe in the case of device confiscation."},
       {"implementation":"Getting this sort of management tool in place is better done earlier rather than later while there are a manageable number of devices and people to introduce to the system."},
       {"more": ["mobile device management solutions"]}
     ]
@@ -132,10 +148,11 @@ var section3 = [
   {
     "isQuestion": true,
     "id":"q24",
-    "q":"Does your organisation use physical or cloud storage for backups?",
+    "q":"Does your organization use physical or cloud storage for backups?",
     "required":false,
     "policyContent":"[orgName] is responsible for managing data backups which are kept in [storagePref] storage.",
     "appendixContent":"",
+    "routineEntry":"",
     "answers":[
       {
         "type":"checkbox",
@@ -143,10 +160,12 @@ var section3 = [
         "storeAs":"[storagePref]",
         "excludes":[],
         "policyEntry":"",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"Is your physical storage still in good working order or is it time to upgrade?",
-            "tipList": "There are physical storage devices available which offer additional security measures, such as keypads – but be sure to keep them in a protective case to prevent accidental damage that could corrupt or wipe the data."
+            "tipList": "There are physical storage devices available which offer additional security measures, such as keypads – but be sure to keep them in a protective case to prevent accidental damage that could corrupt or wipe the data.",
+            "linksList": ""
           }
         ]
       },
@@ -156,10 +175,12 @@ var section3 = [
         "storeAs":"[storagePref]",
         "excludes":[],
         "policyEntry":"",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"Does your cloud storage provider still provide the most appropriate package for your data or is it time to migrate?",
-            "tipList": "Advise staff on how to recognise a legitimate automatic backup so that suspicious network activity can be flagged quickly."
+            "tipList": "Advise staff on how to recognise a legitimate automatic backup so that suspicious network activity can be flagged quickly.",
+            "linksList": ""
           }
         ]
       }
@@ -178,6 +199,7 @@ var section3 = [
     "required":true,
     "policyContent":"To ensure we’re able to recover data during a data loss or compromise incident, we perform backups on an [backupFreq] basis.",
     "appendixContent":"Plan to test your backups on a regular basis! In an ideal world you might never have to restore from backup, but the last thing you want to find during an emergency is that your backups are corrupted or incomplete.",
+    "routineEntry":"",
     "answers":[
       {
         "type":"radio",
@@ -185,10 +207,12 @@ var section3 = [
         "storeAs":"[backupFreq]",
         "excludes":[],
         "policyEntry":"",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"",
-            "tipList": ""
+            "tipList": "",
+            "linksList": ""
           }
         ]
       },
@@ -198,10 +222,12 @@ var section3 = [
         "storeAs":"[backupFreq]",
         "excludes":[],
         "policyEntry":"",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"Are daily backups still frequent enough or do you need backups throughout the day?",
-            "tipList": "It may be sensible to time automatic backups for after the majority of the day's work has been done."
+            "tipList": "It may be sensible to time automatic backups for after the majority of the day's work has been done.",
+            "linksList": ""
           }
         ]
       },
@@ -211,10 +237,12 @@ var section3 = [
         "storeAs":"[backupFreq]",
         "excludes":[],
         "policyEntry":"",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"Is your data changing more frequently? Could an increase in the backup frequency be appropriate?",
-            "tipList": "A week can be a long time, so give your staff a way to trigger infrequent manual backups of their work."
+            "tipList": "A week can be a long time, so give your staff a way to trigger infrequent manual backups of their work.",
+            "linksList": ""
           }
         ]
       },
@@ -225,17 +253,19 @@ var section3 = [
         "storeAs":"[backupFreq]",
         "excludes":[],
         "policyEntry":"",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"",
-            "tipList": ""
+            "tipList": "",
+            "linksList": ""
           }
         ]
       }
     ],
     "tips":[
       {"relevance":""},
-      {"meaning":"Whether automatic or manual, it’s important to back up every device’s data on a regular basis to avoid potential loss due to device confiscation or damage. The frequency of your backups should be dictated by how often your data is created or updated, with hourly or end-of-day being the ideal for organisations that rely heavily on digital documents."},
+      {"meaning":"Whether automatic or manual, it’s important to back up every device’s data on a regular basis to avoid potential loss due to device confiscation or damage. The frequency of your backups should be dictated by how often your data is created or updated, with hourly or end-of-day being the ideal for organizations that rely heavily on digital documents."},
       {"implementation":"If all staff are on the same operating system then using the built-in software to perform automatic backups can make the implementation process easier. There are great cross-platform alternatives available too, and whichever option you choose it’s advisable to go for a zero-knowledge service wherever possible."},
       {"more": ["how often should I back up my data", "zero-knowledge cloud storage", "cross-platform backup solutions"]}
     ]
@@ -243,10 +273,11 @@ var section3 = [
   {
     "isQuestion": true,
     "id":"q26",
-    "q":"How does your organisation secure its backups?",
+    "q":"How does your organization secure its backups?",
     "required":false,
     "policyContent":"[orgName] requires that devices used for work purposes be backed up as the loss, exposure or corruption of [orgName] data puts us, and those we work with, at risk. Backups are managed in the following ways: ",
     "appendixContent":"Be sure to discuss any recent data loss or similar incidents at each review - they are good learning opportunities. An approach to backups is the 3-2-1 rule: at least 3 backup copies of your data on at least 2 different kinds of medium, with at least 1 of these stored offsite.",
+    "routineEntry":"",
     "answers":[
       {
         "type":"checkbox",
@@ -254,10 +285,12 @@ var section3 = [
         "storeAs":"",
         "excludes":[],
         "policyEntry":"- Backups are encrypted to help protect against unauthorised access.",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"",
-            "tipList": ""
+            "tipList": "",
+            "linksList": ""
           }
         ]
       },
@@ -267,10 +300,12 @@ var section3 = [
         "storeAs":"",
         "excludes":[],
         "policyEntry":"- Sometimes backup data becomes corrupted, so to minimise the impact of this we test the backups regularly to detect any issues.",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"Have there been any recent instances of backup failure that can be learned from?",
-            "tipList": "If backups occur overnight, always check that they have finished without errors in the morning."
+            "tipList": "If backups occur overnight, always check that they have finished without errors in the morning.",
+            "linksList": ""
           }
         ]
       },
@@ -279,11 +314,13 @@ var section3 = [
         "answerText":"Multi-factor authentication",
         "storeAs":"",
         "excludes":[],
-        "policyEntry":"- Multi-factor authentication is required in order to access the backups.",
+        "policyEntry":"- Multi-factor authentication is required to access the backups.",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"Do those with access to backups still require it?",
-            "tipList": "Carefully consider who should be granted access to [orgName]'s cloud storage. Too many people and it becomes tougher to manage. Too few and you may struggle to gain access for emergency data restoration."
+            "tipList": "Carefully consider who should be granted access to [orgName]'s cloud storage. Too many people and it becomes tougher to manage. Too few and you may struggle to gain access for emergency data restoration.",
+            "linksList": ""
           }
         ]
       },
@@ -293,10 +330,12 @@ var section3 = [
         "storeAs":"",
         "excludes":[],
         "policyEntry":"- There is a delay in file deletion to minimise accidental destruction.",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"",
-            "tipList": "When setting a file destruction delay on backups, leave a reasonable amount of time for the scheduled deletion to be detected and cancelled."
+            "tipList": "When setting a file destruction delay on backups, leave a reasonable amount of time for the scheduled deletion to be detected and cancelled.",
+            "linksList": ""
           }
         ]
       },
@@ -304,13 +343,15 @@ var section3 = [
         "type":"checkbox",
         "editable":true,
         "answerText":"other security measure",
-        "storeAs":"",
+        "storeAs":"[otherBackupSec]",
         "excludes":[],
-        "policyEntry":"",
+        "policyEntry":"- [otherBackupSec]",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"",
-            "tipList": ""
+            "tipList": "",
+            "linksList": ""
           }
         ]
       }
@@ -325,10 +366,11 @@ var section3 = [
   {
     "isQuestion": true,
     "id":"q27",
-    "q":"Bearing the previous questions in mind, what steps should staff take when their devices are seized?",
+    "q":"What steps should staff take when their devices are seized?",
     "required":false,
     "policyContent":"... your device is seized: whether this is at a border, a protest or a raid, it is important to let someone know as soon about the situation as you are able, in order to begin countering any unauthorised access as early as possible. You are advised to follow these steps: [inc3Tactics]",
     "appendixContent": "Device seizures under any circumstances can be a traumatising event so be sure to offer support to your impacted colleague.",
+    "routineEntry":"",
     "answers":[
       {
         "type":"textarea",
@@ -337,10 +379,12 @@ var section3 = [
         "storeAs":"[inc3Tactics]",
         "excludes":[],
         "policyEntry":"",
+        "routineEntry":"",
         "appendixEntry":[
           {
             "reviewList":"",
-            "tipList": ""
+            "tipList": "",
+            "linksList": ""
           }
         ]
       }

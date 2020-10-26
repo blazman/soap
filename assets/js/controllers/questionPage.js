@@ -1,11 +1,10 @@
 controllers.questionPage = function(data, params){
   document.getElementById('bu').classList.add('active');
-  document.getElementById('bg').classList.remove('active');
+  // add class to body to change nav-start/scroll
+  document.querySelector('body').classList.add('buildPage');
   var templateContext = [];
   window.scrollTo(0,0);
   // queue up all the questions in this section
-  console.log('questionPage - get the questions, answers, id, tips');
-
   // for each of the sections
   for (var i = 0; i < sections.length; i++){
     // get each of the questions
@@ -19,6 +18,12 @@ controllers.questionPage = function(data, params){
           'tips': el.tips,
           'isQ':true,
           'required': el.required
+        };
+      } else if (el.id === 'q0'){
+        var item = {
+          'id':el.id,
+          'title':el.title,
+          'contentArray': el.steps,
         };
       } else {
         var item = {
